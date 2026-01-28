@@ -1,0 +1,87 @@
+.section-block {
+  display: flex;
+  min-height: 80vh;
+}
+
+.section-block.reverse {
+  flex-direction: row-reverse;
+}
+
+.section-image {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  min-height: 400px;
+}
+
+.section-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.section-block:hover .section-image img {
+  transform: scale(1.05);
+}
+
+.section-content {
+  flex: 1;
+  padding: 5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background-color: var(--color-white);
+}
+
+.instrument-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.instrument-list li {
+  padding-left: 1.5rem;
+  position: relative;
+  font-weight: 700;
+}
+
+.instrument-list li::before {
+  content: '•';
+  position: absolute;
+  left: 0;
+  color: var(--color-black);
+}
+
+.bg-light {
+  background-color: var(--color-gray);
+}
+
+.countries-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.country-tag {
+  background-color: var(--color-white);
+  padding: 0.5rem 1.5rem;
+  border-radius: 50px;
+  border: 1px solid #ddd;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+@media (max-width: 768px) {
+  .section-block, .section-block.reverse {
+    flex-direction: column;
+  }
+  
+  .section-content {
+    padding: 3rem 1.5rem;
+  }
+}

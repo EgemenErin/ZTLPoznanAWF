@@ -1,0 +1,120 @@
+.hero {
+  position: relative;
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  color: white;
+}
+
+.hero-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  overflow: hidden; /* Ensure slider doesn't overflow */
+}
+
+.hero-slider {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.5s ease-in-out;
+}
+
+.hero-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  flex-shrink: 0; /* Prevent images from shrinking in the flex container */
+}
+
+.hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4); /* Darken image */
+  background: linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.6) 100%);
+  pointer-events: none; /* Allow interaction with slider/buttons if necessary */
+}
+
+.hero-content {
+  text-align: center;
+  z-index: 1;
+  max-width: 800px;
+  padding: 0 1rem; /* Ensure content doesn't touch edges on small screens */
+}
+
+.hero-subtitle {
+  font-family: var(--font-sans);
+  font-size: 1.2rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+  color: rgba(255,255,255,0.9);
+}
+
+.hero-title {
+  font-size: 4rem;
+  line-height: 1.1;
+  margin-bottom: 2rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 1);
+}
+
+.hero-quote {
+  font-style: italic;
+  font-size: 1.5rem;
+  margin-bottom: 3rem;
+  font-family: var(--font-serif);
+}
+
+.hero-nav-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  z-index: 2;
+  transition: color 0.3s ease, transform 0.3s ease;
+  padding: 1rem;
+}
+
+.hero-nav-btn:hover {
+  color: white;
+  transform: translateY(-50%) scale(1.1);
+}
+
+.hero-nav-btn.prev {
+  left: 20px;
+}
+
+.hero-nav-btn.next {
+  right: 20px;
+}
+
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: 2.5rem;
+  }
+  
+  .hero-nav-btn {
+    padding: 0.5rem;
+  }
+  
+  .hero-nav-btn.prev {
+    left: 5px;
+  }
+
+  .hero-nav-btn.next {
+    right: 5px;
+  }
+}
