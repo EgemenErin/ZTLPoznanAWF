@@ -1,16 +1,37 @@
-# React + Vite
+# ZTL Poznań AWF Event Platform
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Next.js App Router site for ZTL Poznań AWF with a premium event calendar, newsletter capture, and Supabase-backed community forum.
 
-Currently, two official plugins are available:
+## Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Next.js App Router
+- Tailwind CSS with Shadcn-style primitives
+- Supabase Postgres/Auth/Storage-ready architecture
+- Resend contact sync for newsletter subscriptions
 
-## React Compiler
+## Local Setup
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+```bash
+npm install
+cp .env.example .env.local
+npm run dev
+```
 
-## Expanding the ESLint configuration
+## Supabase
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Apply `supabase/migrations/001_event_platform.sql` to create `profiles`, `events`, `newsletter_subs`, `forum_categories`, and `forum_posts`.
+
+The migration also enables RLS, seeds starter event/forum categories, and creates a profile bootstrap trigger for `auth.users`.
+
+## Environment
+
+```bash
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
+SUPABASE_SERVICE_ROLE_KEY=
+RESEND_API_KEY=
+RESEND_AUDIENCE_ID=
+NEXT_PUBLIC_SITE_URL=http://localhost:3000
+```
+
+The app includes fallback demo events and forum content when Supabase variables are not configured.

@@ -1,0 +1,222 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: 38 55% 94%;
+  --foreground: 36 9% 6%;
+  --card: 42 70% 98%;
+  --card-foreground: 36 9% 6%;
+  --primary: 36 9% 6%;
+  --primary-foreground: 38 55% 94%;
+  --secondary: 37 28% 84%;
+  --secondary-foreground: 36 9% 6%;
+  --muted: 36 30% 88%;
+  --muted-foreground: 36 8% 36%;
+  --accent: 34 45% 43%;
+  --accent-foreground: 0 0% 100%;
+  --border: 35 18% 78%;
+  --input: 35 18% 78%;
+  --ring: 34 45% 43%;
+  --radius: 1.25rem;
+}
+
+* {
+  border-color: hsl(var(--border));
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background:
+    radial-gradient(circle at 20% 10%, rgba(161, 116, 59, 0.16), transparent 28rem),
+    radial-gradient(circle at 80% 0%, rgba(92, 31, 37, 0.12), transparent 24rem),
+    hsl(var(--background));
+  color: hsl(var(--foreground));
+  font-feature-settings: "liga" 1, "kern" 1;
+  text-rendering: optimizeLegibility;
+}
+
+@keyframes hero-drift {
+  0% {
+    transform: scale(1.04) translate3d(0, 0, 0);
+  }
+
+  100% {
+    transform: scale(1.1) translate3d(-1.5%, -1%, 0);
+  }
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 1.5rem, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes rule-grow {
+  from {
+    transform: scaleX(0);
+  }
+
+  to {
+    transform: scaleX(1);
+  }
+}
+
+::selection {
+  background: #5c1f25;
+  color: #fffaf0;
+}
+
+.grain::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 50;
+  opacity: 0.07;
+  background-image:
+    linear-gradient(90deg, rgba(17, 16, 14, 0.12) 1px, transparent 1px),
+    linear-gradient(rgba(17, 16, 14, 0.08) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: linear-gradient(to bottom, black, transparent 70%);
+}
+
+.editorial-rule {
+  position: relative;
+}
+
+.editorial-rule::after {
+  content: "";
+  display: block;
+  width: 5rem;
+  height: 1px;
+  margin-top: 1.25rem;
+  background: currentColor;
+  opacity: 0.5;
+  transform-origin: left;
+  animation: rule-grow 900ms ease 500ms both;
+}
+
+[data-animate] {
+  opacity: 0;
+  transform: translate3d(0, 1.5rem, 0);
+  transition:
+    opacity 700ms ease,
+    transform 700ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  transition-delay: var(--motion-delay, 0ms);
+}
+
+[data-animate].is-visible {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
+.motion-hero-image {
+  animation: hero-drift 14s ease-out both;
+}
+
+.motion-hero-copy > * {
+  animation: fade-up 800ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.motion-hero-copy > :nth-child(1) {
+  animation-delay: 120ms;
+}
+
+.motion-hero-copy > :nth-child(2) {
+  animation-delay: 260ms;
+}
+
+.motion-hero-copy > :nth-child(3) {
+  animation-delay: 400ms;
+}
+
+.motion-hero-copy > :nth-child(4) {
+  animation-delay: 540ms;
+}
+
+.motion-card {
+  transition:
+    transform 280ms ease,
+    box-shadow 280ms ease,
+    border-color 280ms ease,
+    background-color 280ms ease;
+}
+
+.motion-card:hover {
+  transform: translateY(-0.35rem);
+  border-color: rgba(161, 116, 59, 0.35);
+  box-shadow: 0 30px 90px rgba(17, 16, 14, 0.16);
+}
+
+.motion-card .motion-image {
+  transition: transform 700ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.motion-card:hover .motion-image {
+  transform: scale(1.055);
+}
+
+.animate-in {
+  animation: fade-up 650ms ease both;
+}
+
+.nav-motion-link {
+  position: relative;
+}
+
+.nav-motion-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -0.45rem;
+  height: 1px;
+  background: #5c1f25;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 220ms ease;
+}
+
+.nav-motion-link:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+.motion-link-icon {
+  transition: transform 220ms ease;
+}
+
+a:hover .motion-link-icon,
+button:hover .motion-link-icon {
+  transform: translateX(0.2rem);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 1ms !important;
+  }
+
+  [data-animate] {
+    opacity: 1;
+    transform: none;
+  }
+}
