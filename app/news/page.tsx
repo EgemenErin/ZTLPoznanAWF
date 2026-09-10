@@ -4,13 +4,12 @@ import Link from "next/link";
 import { format } from "date-fns";
 import { enUS, pl } from "date-fns/locale";
 
-import { NewsPostBody } from "@/components/news-post-content";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { getCurrentProfile, getForumThreads } from "@/lib/forum";
-import { getPostTitle } from "@/lib/forum-copy";
+import { getPostExcerpt, getPostTitle } from "@/lib/forum-copy";
 import { getLocale } from "@/lib/i18n-server";
 
 export const metadata: Metadata = {
@@ -67,7 +66,7 @@ export default async function NewsPage() {
               <h2 className="mt-5 font-serif text-3xl font-bold leading-tight">
                 {getPostTitle(post, locale)}
               </h2>
-              <NewsPostBody post={post} locale={locale} className="mt-4 line-clamp-4 text-sm leading-6 text-ink/65" />
+              <p className="mt-4 line-clamp-4 text-sm leading-6 text-ink/65">{getPostExcerpt(post, locale)}</p>
               <Link href={`/news/${post.id}`} className="mt-6 inline-flex text-sm font-bold text-wine">
                 {isEn ? "Read more" : "Czytaj dalej"} →
               </Link>

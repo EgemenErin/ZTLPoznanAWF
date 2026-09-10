@@ -11,7 +11,7 @@ import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { Badge } from "@/components/ui/badge";
 import { getCurrentProfile, getForumCategory, getForumThreads } from "@/lib/forum";
-import { getCategoryDescription, getCategoryName, getPostAuthorLabel, getPostBody, getPostTitle } from "@/lib/forum-copy";
+import { getCategoryDescription, getCategoryName, getPostAuthorLabel, getPostExcerpt, getPostTitle } from "@/lib/forum-copy";
 import { copy } from "@/lib/i18n";
 import { getLocale } from "@/lib/i18n-server";
 
@@ -65,7 +65,7 @@ export default async function ForumCategoryPage({ params }: CategoryPageProps) {
                   {thread.is_pinned ? <Pin className="h-4 w-4 text-brass" /> : null}
                   <h2 className="font-serif text-3xl font-bold">{getPostTitle(thread, locale)}</h2>
                 </div>
-                <p className="mt-3 line-clamp-2 text-ink/65">{getPostBody(thread, locale)}</p>
+                <p className="mt-3 line-clamp-2 text-ink/65">{getPostExcerpt(thread, locale)}</p>
                 <p className="mt-5 text-xs uppercase tracking-[0.16em] text-ink/45">
                   {getPostAuthorLabel(thread, locale)} ·{" "}
                   {formatDistanceToNow(new Date(thread.created_at), { addSuffix: true, locale: dateLocale })}

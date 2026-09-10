@@ -8,12 +8,11 @@ import { enUS, pl } from "date-fns/locale";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { NewsletterForm } from "@/components/newsletter-form";
-import { NewsPostBody } from "@/components/news-post-content";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { getEvents } from "@/lib/events";
 import { getFeaturedForumPosts } from "@/lib/forum";
-import { getCategoryName, getPostTitle } from "@/lib/forum-copy";
+import { getCategoryName, getPostExcerpt, getPostTitle } from "@/lib/forum-copy";
 import { copy } from "@/lib/i18n";
 import { getLocale } from "@/lib/i18n-server";
 import { localizedSiteContent } from "@/lib/site-content";
@@ -171,7 +170,7 @@ export default async function HomePage() {
                     <h3 className="font-serif text-3xl font-bold leading-tight">
                       {getPostTitle(post, locale)}
                     </h3>
-                    <NewsPostBody post={post} locale={locale} className="mt-4 line-clamp-3 text-sm leading-6 text-ink/65" />
+                    <p className="mt-4 line-clamp-3 text-sm leading-6 text-ink/65">{getPostExcerpt(post, locale)}</p>
                     <Link
                       href={`/news/${post.id}`}
                       className="mt-6 inline-flex items-center gap-2 text-sm font-bold text-wine"

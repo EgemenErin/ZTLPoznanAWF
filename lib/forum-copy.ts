@@ -46,6 +46,24 @@ export function getPostBody(post: ForumPost, locale: Locale) {
   return locale === "en" ? post.body_en ?? post.body : post.body;
 }
 
+/** Plain-text snippet for cards/lists — strips markdown images so only `image_url` is used as preview media. */
+export function getPostExcerpt(post: ForumPost, locale: Locale) {
+  return getPostBody(post, locale)
+    .split(/\r?\n/)
+    .filter((line) => !/^!\[[^\]]*\]\(https:\/\/[^)]+\)$/.test(line.trim()))
+    .join("\n")
+    .replace(/!\[[^\]]*\]\(https:\/\/[^)]+\)/g, "")
+    .replace(/\[([^\]]+)\]\(https:\/\/[^)]+\)/g, "$1")
+    .replace(/\*\*([^*]+)\*\*/g, "$1")
+    .replace(/\*([^*]+)\*/g, "$1")
+    .replace(/`([^`]+)`/g, "$1")
+    .replace(/^#{1,6}\s+/gm, "")
+    .replace(/^>\s+/gm, "")
+    .replace(/^-\s+/gm, "")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
 export function getPostAuthorLabel(post: ForumPost, locale: Locale) {
   const fallback = locale === "en" ? "Guest" : "Gość";
   return post.guest_name?.trim() || post.author?.display_name || fallback;

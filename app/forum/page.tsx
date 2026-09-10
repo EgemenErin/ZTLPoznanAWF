@@ -7,7 +7,7 @@ import { SiteHeader } from "@/components/site-header";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { getCurrentProfile, getForumCategories, getForumThreads } from "@/lib/forum";
-import { getCategoryDescription, getCategoryName, getPostBody, getPostTitle } from "@/lib/forum-copy";
+import { getCategoryDescription, getCategoryName, getPostExcerpt, getPostTitle } from "@/lib/forum-copy";
 import { copy } from "@/lib/i18n";
 import { getLocale } from "@/lib/i18n-server";
 
@@ -77,7 +77,7 @@ export default async function ForumPage() {
                 className="rounded-[1.5rem] border border-ink/10 bg-paper/70 p-5 transition hover:border-wine"
               >
                 <p className="font-serif text-2xl font-bold">{getPostTitle(thread, locale)}</p>
-                <p className="mt-2 line-clamp-2 text-sm text-ink/60">{getPostBody(thread, locale)}</p>
+                <p className="mt-2 line-clamp-2 text-sm text-ink/60">{getPostExcerpt(thread, locale)}</p>
               </Link>
             ))}
           </div>
