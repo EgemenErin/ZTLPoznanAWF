@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   title: "ZTL Poznań AWF",
   description:
     "Zespół Tańca Ludowego Poznań AWF: wydarzenia, oferta, newsletter i społeczność.",
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"),
 };
 
 export default async function RootLayout({
