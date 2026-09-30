@@ -1,7 +1,6 @@
 "use client";
 
 import { useActionState } from "react";
-import Link from "next/link";
 
 import { registerWithPassword, type AuthState } from "@/app/auth/actions";
 import { Button } from "@/components/ui/button";
@@ -63,12 +62,6 @@ export function RegisterForm({ locale }: { locale: Locale }) {
       <Button type="submit" disabled={pending} variant="brass">
         {pending ? t.registerPending : t.registerSubmit}
       </Button>
-      <p className="text-sm text-ink/60">
-        {t.hasAccount}{" "}
-        <Link href="/auth/login" className="font-semibold text-wine">
-          {t.loginSubmit}
-        </Link>
-      </p>
       {state.message ? (
         <p className={state.status === "error" ? "text-sm text-wine" : "text-sm text-ink/65"}>
           {state.message}
