@@ -7,6 +7,14 @@ export function MotionBoot({ locale }: { locale: string }) {
   const pathname = usePathname();
 
   useEffect(() => {
+    if (typeof navigator !== "undefined" && "serviceWorker" in navigator) {
+      navigator.serviceWorker.getRegistrations().then((registrations) => {
+        for (const registration of registrations) {
+          registration.unregister();
+        }
+      });
+    }
+
     const observed = new WeakSet<Element>();
 
     const intersectionObserver = new IntersectionObserver(

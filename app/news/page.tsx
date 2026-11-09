@@ -4,6 +4,10 @@ import Link from "next/link";
 import { format } from "date-fns";
 import { enUS, pl } from "date-fns/locale";
 
+import {
+  NewsCreateButton,
+  NewsEditButton,
+} from "@/components/admin-news-quick-actions";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { Badge } from "@/components/ui/badge";
@@ -20,7 +24,10 @@ export default async function NewsPage() {
   const locale = await getLocale();
   const isEn = locale === "en";
   const dateLocale = isEn ? enUS : pl;
-  const [posts, profile] = await Promise.all([getForumThreads(), getCurrentProfile()]);
+  const [posts, profile] = await Promise.all([
+    getForumThreads(),
+    getCurrentProfile(),
+  ]);
   const canManage = profile?.role === "admin" || profile?.role === "moderator";
 
   return (
@@ -40,36 +47,58 @@ export default async function NewsPage() {
             </p>
           </div>
           {canManage ? (
-            <Button asChild variant="outline">
-              <Link href="/admin/news">{isEn ? "Manage news" : "Zarządzaj aktualnościami"}</Link>
-            </Button>
+            <div className="flex flex-wrap items-center gap-3">
+              <NewsCreateButton locale={locale} />
+              <Button asChild variant="outline">
+                <Link href="/admin#news">
+                  {isEn ? "All news in Admin" : "Panel aktualności"}
+                </Link>
+              </Button>
+            </div>
           ) : null}
         </div>
         <div className="grid gap-5 lg:grid-cols-3">
           {posts.map((post) => (
-            <article key={post.id} className="overflow-hidden rounded-[2rem] border border-ink/10 bg-white/60 shadow-glass backdrop-blur">
-              {post.image_url ? (
-                <div className="relative min-h-56 border-b border-ink/10">
-                  <Image
-                    src={post.image_url}
-                    alt=""
-                    fill
-                    sizes="(min-width: 1024px) 33vw, 100vw"
-                    className="object-cover"
-                  />
+            <article
+              key={post.id}
+              className="flex flex-col justify-between overflow-hidden rounded-[2rem] border border-ink/10 bg-white/60 shadow-glass backdrop-blur"
+            >
+              <div>
+                {post.image_url ? (
+                  <div className="relative min-h-56 border-b border-ink/10">
+                    <Image
+                      src={post.image_url}
+                      alt=""
+                      fill
+                      sizes="(min-width: 1024px) 33vw, 100vw"
+                      className="object-cover"
+                    />
+                  </div>
+                ) : null}
+                <div className="p-6">
+                  <div className="flex items-center justify-between gap-2">
+                    <p className="text-xs font-semibold uppercase tracking-[0.16em] text-brass">
+                      {format(new Date(post.created_at), "dd LLL yyyy", {
+                        locale: dateLocale,
+                      })}
+                    </p>
+                    {canManage ? (
+                      <NewsEditButton post={post} locale={locale} />
+                    ) : null}
+                  </div>
+                  <h2 className="mt-5 font-serif text-3xl font-bold leading-tight">
+                    {getPostTitle(post, locale)}
+                  </h2>
+                  <p className="mt-4 line-clamp-4 text-sm leading-6 text-ink/65">
+                    {getPostExcerpt(post, locale)}
+                  </p>
+                  <Link
+                    href={`/news/${post.id}`}
+                    className="mt-6 inline-flex text-sm font-bold text-wine"
+                  >
+                    {isEn ? "Read more" : "Czytaj dalej"} →
+                  </Link>
                 </div>
-              ) : null}
-              <div className="p-6">
-              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-brass">
-                {format(new Date(post.created_at), "dd LLL yyyy", { locale: dateLocale })}
-              </p>
-              <h2 className="mt-5 font-serif text-3xl font-bold leading-tight">
-                {getPostTitle(post, locale)}
-              </h2>
-              <p className="mt-4 line-clamp-4 text-sm leading-6 text-ink/65">{getPostExcerpt(post, locale)}</p>
-              <Link href={`/news/${post.id}`} className="mt-6 inline-flex text-sm font-bold text-wine">
-                {isEn ? "Read more" : "Czytaj dalej"} →
-              </Link>
               </div>
             </article>
           ))}

@@ -7,6 +7,10 @@ import { format } from "date-fns";
 import { enUS, pl } from "date-fns/locale";
 
 import { getRememberedGuestName } from "@/app/forum/actions";
+import {
+  NewsCreateButton,
+  NewsEditButton,
+} from "@/components/admin-news-quick-actions";
 import { ReplyForm } from "@/components/forum-forms";
 import { ForumReactions } from "@/components/forum-reactions";
 import { NewsPostBody } from "@/components/news-post-content";
@@ -53,6 +57,7 @@ export default async function NewsDetailPage({ params }: NewsDetailProps) {
     notFound();
   }
 
+  const canManage = profile?.role === "admin" || profile?.role === "moderator";
   const categorySlug =
     categories.find((category) => category.id === thread.category_id)?.slug ?? "ogloszenia";
   const reactionMap = await getForumReactions(
@@ -64,9 +69,17 @@ export default async function NewsDetailPage({ params }: NewsDetailProps) {
     <>
       <SiteHeader locale={locale} />
       <main className="container max-w-4xl py-20">
-        <Link href="/news" className="text-sm font-bold text-wine">
-          ← {isEn ? "Back to news" : "Powrót do aktualności"}
-        </Link>
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <Link href="/news" className="text-sm font-bold text-wine">
+            ← {isEn ? "Back to news" : "Powrót do aktualności"}
+          </Link>
+          {canManage ? (
+            <div className="flex flex-wrap items-center gap-2">
+              <NewsEditButton post={thread} locale={locale} />
+              <NewsCreateButton locale={locale} compact />
+            </div>
+          ) : null}
+        </div>
         <article className="mt-10 rounded-[2.5rem] border border-ink/10 bg-white/60 p-8 shadow-glass backdrop-blur md:p-12">
           <Badge>{isEn ? "News" : "Aktualności"}</Badge>
           <h1 className="mt-6 font-serif text-5xl font-bold leading-tight md:text-7xl">

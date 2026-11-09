@@ -171,7 +171,10 @@ export const getForumThreads = cache(async (categorySlug?: string) => {
 
   if (!hasSupabaseEnv()) {
     return fallbackForumPosts.filter(
-      (post) => !post.parent_id && (!category || post.category_id === category.id),
+      (post) =>
+        !post.parent_id &&
+        post.title !== "__SITE_CONTENT__" &&
+        (!category || post.category_id === category.id),
     );
   }
 
@@ -180,6 +183,7 @@ export const getForumThreads = cache(async (categorySlug?: string) => {
     .from("forum_posts")
     .select("*, author:profiles(id, display_name, username, role)")
     .is("parent_id", null)
+    .neq("title", "__SITE_CONTENT__")
     .eq("status", "published")
     .order("is_pinned", { ascending: false })
     .order("created_at", { ascending: false });
@@ -200,7 +204,13 @@ export const getForumThreads = cache(async (categorySlug?: string) => {
 export const getFeaturedForumPosts = cache(async () => {
   if (!hasSupabaseEnv()) {
     return fallbackForumPosts
-      .filter((post) => !post.parent_id && post.status === "published" && post.is_pinned)
+      .filter(
+        (post) =>
+          !post.parent_id &&
+          post.title !== "__SITE_CONTENT__" &&
+          post.status === "published" &&
+          post.is_pinned,
+      )
       .slice(0, 3);
   }
 
@@ -211,6 +221,7 @@ export const getFeaturedForumPosts = cache(async () => {
       "*, author:profiles(id, display_name, username, role), category:forum_categories(id, slug, name, description, sort_order)",
     )
     .is("parent_id", null)
+    .neq("title", "__SITE_CONTENT__")
     .eq("status", "published")
     .eq("is_pinned", true)
     .order("created_at", { ascending: false })

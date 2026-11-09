@@ -102,6 +102,7 @@ export async function createNewsPost(
 
   revalidatePath("/");
   revalidatePath("/news");
+  revalidatePath("/admin");
   revalidatePath("/admin/news");
   return { status: "success", message: "News post created." };
 }
@@ -147,6 +148,7 @@ export async function updateNewsPost(
   revalidatePath("/");
   revalidatePath("/news");
   revalidatePath(`/news/${postId}`);
+  revalidatePath("/admin");
   revalidatePath("/admin/news");
   return { status: "success", message: "News post updated." };
 }
@@ -163,5 +165,6 @@ export async function deleteNewsPost(formData: FormData) {
   revalidatePath("/");
   revalidatePath("/news");
   revalidatePath(`/news/${postId}`);
+  revalidatePath("/admin");
   revalidatePath("/admin/news");
 }

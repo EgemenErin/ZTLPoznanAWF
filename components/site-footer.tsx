@@ -1,44 +1,86 @@
 import Image from "next/image";
 import Link from "next/link";
 
+import { AdminSectionQuickEdit } from "@/components/admin-section-quick-edit";
 import { getCurrentProfile } from "@/lib/forum";
 import { copy, type Locale } from "@/lib/i18n";
+import { getSiteContent } from "@/lib/site-content-server";
 
 export async function SiteFooter({ locale }: { locale: Locale }) {
   const t = copy[locale].footer;
-  const profile = await getCurrentProfile();
+  const navCopy = copy[locale].nav;
+  const [profile, siteContent] = await Promise.all([
+    getCurrentProfile(),
+    getSiteContent(),
+  ]);
+  const footerCopy = siteContent[locale].footer;
   const canSeeAdmin = profile?.role === "admin" || profile?.role === "moderator";
 
   return (
     <footer id="contact" className="border-t border-ink/10 bg-ink py-16 text-paper">
       <div className="container grid gap-10 md:grid-cols-[1.2fr_1fr_1fr]">
         <div>
-          <Image src="/logo/ztllogo.png" alt="" width={80} height={80} className="mb-5 h-20 w-20 rounded-full" />
-          <h2 className="font-serif text-3xl">Zespół Tańca Ludowego “Poznań” AWF</h2>
+          <Image
+            src="/logo/ztllogo.png"
+            alt=""
+            width={80}
+            height={80}
+            className="mb-5 h-20 w-20 rounded-full"
+          />
+          <h2 className="font-serif text-3xl">{footerCopy.teamName}</h2>
           <p className="mt-4 max-w-md text-sm leading-7 text-paper/70">
-            {t.description}
+            {footerCopy.description}
           </p>
+          {canSeeAdmin ? (
+            <div className="mt-5">
+              <AdminSectionQuickEdit
+                section="location"
+                locale={locale}
+                content={siteContent}
+                label={locale === "en" ? "Edit footer & address" : "Edytuj stopkę i adres"}
+                variant="dark"
+              />
+            </div>
+          ) : null}
         </div>
         <div>
           <h3 className="mb-4 text-sm font-semibold uppercase tracking-[0.22em] text-paper/60">
             {t.contact}
           </h3>
-          <p>AWF Poznań</p>
-          <p>ul. Królowej Jadwigi 27/39</p>
-          <p>61-871 Poznań</p>
-          <p className="mt-5 text-paper/70">{t.director}</p>
+          <p>{footerCopy.addressLine1}</p>
+          <p>{footerCopy.addressLine2}</p>
+          <p>{footerCopy.addressLine3}</p>
+          <p className="mt-5 text-paper/70">{footerCopy.director}</p>
+          <Link
+            href="/kontakt"
+            className="mt-4 inline-flex text-sm font-semibold text-brass transition hover:text-paper"
+          >
+            {locale === "en" ? "Full contact details →" : "Pełne dane kontaktowe →"}
+          </Link>
         </div>
         <div>
           <h3 className="mb-4 text-sm font-semibold uppercase tracking-[0.22em] text-paper/60">
             {t.platform}
           </h3>
           <div className="grid gap-3 text-paper/80">
-            <Link href="/oferta" className="hover:text-white">{t.events}</Link>
-            <Link href="/newsletter" className="hover:text-white">{t.newsletter}</Link>
-            <Link href="/forum" className="hover:text-white">{t.forum}</Link>
+            <Link href="/kontakt" className="hover:text-white">
+              {navCopy.contact}
+            </Link>
+            <Link href="/contact" className="hover:text-white">
+              {navCopy.contactBusiness}
+            </Link>
+            <Link href="/oferta" className="hover:text-white">
+              {t.events}
+            </Link>
+            <Link href="/newsletter" className="hover:text-white">
+              {t.newsletter}
+            </Link>
+            <Link href="/news" className="hover:text-white">
+              {t.forum}
+            </Link>
             {canSeeAdmin ? (
-              <Link href="/admin" className="hover:text-white">
-                Admin
+              <Link href="/admin" className="font-semibold text-brass hover:text-white">
+                Admin Panel
               </Link>
             ) : null}
           </div>
@@ -46,7 +88,7 @@ export async function SiteFooter({ locale }: { locale: Locale }) {
       </div>
       <div className="container mt-12 flex flex-col gap-6 border-t border-paper/10 pt-8 sm:flex-row sm:items-center sm:justify-between">
         <p className="text-xs uppercase tracking-[0.18em] text-paper/45">
-          © {new Date().getFullYear()} ZTL Poznań AWF. {t.copyright}
+          © {new Date().getFullYear()} ZTL Poznań AWF. {footerCopy.copyright}
         </p>
         <a
           href="https://www.cioff.pl/"
