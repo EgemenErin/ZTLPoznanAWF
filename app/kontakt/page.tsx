@@ -164,16 +164,9 @@ export default async function KontaktPage() {
         {/* Organizational Note Banner */}
         {k.rehearsalNote ? (
           <section className="mt-8 rounded-[2rem] border border-ink/10 bg-vellum/80 p-6 md:p-8">
-            <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-              <div className="flex items-start gap-4">
-                <Sparkles className="mt-1 h-5 w-5 shrink-0 text-brass" />
-                <p className="text-base leading-7 text-ink/80">{k.rehearsalNote}</p>
-              </div>
-              <Button asChild variant="outline" size="sm" className="shrink-0">
-                <Link href="/contact">
-                  {isEn ? "Business & concert inquiries" : "Kontakt dla firm i koncerty"}
-                </Link>
-              </Button>
+            <div className="flex items-start gap-4">
+              <Sparkles className="mt-1 h-5 w-5 shrink-0 text-brass" />
+              <p className="text-base leading-7 text-ink/80">{k.rehearsalNote}</p>
             </div>
           </section>
         ) : null}

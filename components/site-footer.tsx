@@ -66,9 +66,6 @@ export async function SiteFooter({ locale }: { locale: Locale }) {
             <Link href="/kontakt" className="hover:text-white">
               {navCopy.contact}
             </Link>
-            <Link href="/contact" className="hover:text-white">
-              {navCopy.contactBusiness}
-            </Link>
             <Link href="/oferta" className="hover:text-white">
               {t.events}
             </Link>

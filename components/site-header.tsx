@@ -24,7 +24,6 @@ export async function SiteHeader({ locale }: { locale: Locale }) {
   const canSeeAdmin = profile?.role === "admin" || profile?.role === "moderator";
   const navItems = [
     { href: "/#about", label: headerCopy.navAbout || t.about },
-    { href: "/contact", label: headerCopy.navContactBusiness || t.contactBusiness },
     { href: "/news", label: headerCopy.navNews || t.news },
     { href: "/kontakt", label: headerCopy.navContact || t.contact },
     ...(canSeeAdmin ? [{ href: "/admin", label: "Admin" }] : []),

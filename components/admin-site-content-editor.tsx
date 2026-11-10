@@ -77,12 +77,6 @@ const SECTION_TABS: Array<{
     labelEn: "Kontakt Page",
     icon: PhoneCall,
   },
-  {
-    key: "businessContact",
-    labelPl: "Kontakt dla firm",
-    labelEn: "Business Contact",
-    icon: PhoneCall,
-  },
 ];
 
 export function AdminSiteContentEditor({
@@ -417,20 +411,6 @@ export function AdminSiteContentEditor({
                   updateCurrentLocale((prev) => ({
                     ...prev,
                     header: { ...prev.header, navAbout: e.target.value },
-                  }))
-                }
-              />
-            </label>
-            <label className="grid gap-1.5 text-sm font-medium">
-              <span className="text-xs font-semibold uppercase tracking-[0.14em] text-ink/60">
-                Nav Link: Business Contact (/contact)
-              </span>
-              <Input
-                value={localeData.header.navContactBusiness}
-                onChange={(e) =>
-                  updateCurrentLocale((prev) => ({
-                    ...prev,
-                    header: { ...prev.header, navContactBusiness: e.target.value },
                   }))
                 }
               />
