@@ -1,8 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
 import { cookies } from "next/headers";
-import { Search } from "lucide-react";
+import { LogOut, Search } from "lucide-react";
 
+import { signOut } from "@/app/auth/actions";
 import { AdminNotifications } from "@/components/admin-notifications";
 import { AdminSectionQuickEdit } from "@/components/admin-section-quick-edit";
 import { LanguageSwitcher } from "@/components/language-switcher";
@@ -14,6 +15,7 @@ import { getSiteContent } from "@/lib/site-content-server";
 
 export async function SiteHeader({ locale }: { locale: Locale }) {
   const t = copy[locale].nav;
+  const isEn = locale === "en";
   const [profile, siteContent] = await Promise.all([
     getCurrentProfile(),
     getSiteContent(),
@@ -71,13 +73,27 @@ export async function SiteHeader({ locale }: { locale: Locale }) {
               section="header"
               locale={locale}
               content={siteContent}
-              label={locale === "en" ? "Edit header" : "Edytuj nagłówek"}
+              label={isEn ? "Edit header" : "Edytuj nagłówek"}
               variant="compact"
               className="hidden sm:inline-flex"
             />
           ) : null}
           {canSeeAdmin ? (
             <AdminNotifications locale={locale} notifications={notifications} />
+          ) : null}
+          {profile ? (
+            <form action={signOut}>
+              <Button
+                type="submit"
+                variant="outline"
+                size="sm"
+                className="h-8 gap-1.5 border-ink/20 bg-white/80 px-3 text-xs font-semibold uppercase tracking-[0.12em] text-ink hover:bg-wine hover:text-paper"
+                title={isEn ? "Log out to view site normally" : "Wyloguj się, aby widzieć stronę normalnie"}
+              >
+                <LogOut className="h-3.5 w-3.5" />
+                <span className="hidden sm:inline">{isEn ? "Log out" : "Wyloguj"}</span>
+              </Button>
+            </form>
           ) : null}
           <LanguageSwitcher locale={locale} />
           <Button variant="ghost" size="sm" aria-label={t.search}>
@@ -92,7 +108,7 @@ export async function SiteHeader({ locale }: { locale: Locale }) {
           <Link
             key={item.href}
             href={item.href}
-            className=" shrink-0 whitespace-nowrap transition hover:text-wine"
+            className="shrink-0 whitespace-nowrap transition hover:text-wine"
           >
             {item.label}
           </Link>

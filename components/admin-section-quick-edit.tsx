@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { Pencil, X } from "lucide-react";
 
 import {
@@ -28,8 +29,32 @@ export function AdminSectionQuickEdit({
   className?: string;
 }) {
   const [open, setOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const isEn = locale === "en";
   const defaultLabel = isEn ? "Edit section" : "Edytuj sekcję";
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!open) return;
+
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    function handleKeyDown(e: KeyboardEvent) {
+      if (e.key === "Escape") {
+        setOpen(false);
+      }
+    }
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.body.style.overflow = prevOverflow;
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [open]);
 
   return (
     <>
@@ -53,43 +78,46 @@ export function AdminSectionQuickEdit({
         <span>{label ?? defaultLabel}</span>
       </Button>
 
-      {open ? (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-ink/60 p-4 backdrop-blur-sm"
-          onClick={() => setOpen(false)}
-        >
-          <div
-            className="max-h-[90vh] w-full max-w-4xl overflow-y-auto rounded-[2.25rem] border border-ink/15 bg-paper p-6 text-ink shadow-2xl md:p-8"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="mb-5 flex items-center justify-between gap-4">
-              <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brass">
-                  {isEn ? "Quick Editor" : "Szybka edycja"}
-                </p>
-                <h2 className="mt-1 font-serif text-3xl font-bold">
-                  {label ?? defaultLabel}
-                </h2>
-              </div>
-              <button
-                type="button"
-                onClick={() => setOpen(false)}
-                className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-ink/15 bg-white/80 text-ink/70 transition hover:bg-wine hover:text-paper"
-                aria-label="Close"
+      {open && mounted
+        ? createPortal(
+            <div
+              className="fixed inset-0 z-[100] flex items-center justify-center overflow-y-auto bg-ink/65 p-4 backdrop-blur-sm sm:p-6"
+              onClick={() => setOpen(false)}
+            >
+              <div
+                className="relative my-auto max-h-[90vh] w-full max-w-4xl overflow-y-auto rounded-[2.25rem] border border-ink/15 bg-paper p-6 text-ink shadow-2xl md:p-8"
+                onClick={(e) => e.stopPropagation()}
               >
-                <X className="h-4 w-4" />
-              </button>
-            </div>
+                <div className="mb-5 flex items-center justify-between gap-4">
+                  <div>
+                    <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brass">
+                      {isEn ? "Quick Editor" : "Szybka edycja"}
+                    </p>
+                    <h2 className="mt-1 font-serif text-3xl font-bold">
+                      {label ?? defaultLabel}
+                    </h2>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setOpen(false)}
+                    className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-ink/15 bg-white/80 text-ink/70 transition hover:bg-wine hover:text-paper"
+                    aria-label="Close"
+                  >
+                    <X className="h-4 w-4" />
+                  </button>
+                </div>
 
-            <AdminSiteContentEditor
-              initialContent={content}
-              initialLocale={locale}
-              focusedSection={section}
-              onSaved={() => setOpen(false)}
-            />
-          </div>
-        </div>
-      ) : null}
+                <AdminSiteContentEditor
+                  initialContent={content}
+                  initialLocale={locale}
+                  focusedSection={section}
+                  onSaved={() => setOpen(false)}
+                />
+              </div>
+            </div>,
+            document.body,
+          )
+        : null}
     </>
   );
 }

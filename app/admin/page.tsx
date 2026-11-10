@@ -1,7 +1,15 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { CalendarDays, LayoutTemplate, Newspaper, PhoneCall, ShieldCheck } from "lucide-react";
+import {
+  CalendarDays,
+  LayoutTemplate,
+  LogOut,
+  Newspaper,
+  PhoneCall,
+  ShieldCheck,
+} from "lucide-react";
 
+import { signOut } from "@/app/auth/actions";
 import { AdminNewsManager } from "@/components/admin-news-manager";
 import { AdminSiteContentEditor } from "@/components/admin-site-content-editor";
 import { SiteFooter } from "@/components/site-footer";
@@ -19,6 +27,7 @@ export const metadata: Metadata = {
 
 export default async function AdminPage() {
   const locale = await getLocale();
+  const isEn = locale === "en";
   const [profile, posts, siteContent] = await Promise.all([
     getCurrentProfile(),
     getForumThreads(),
@@ -70,6 +79,20 @@ export default async function AdminPage() {
                 <PhoneCall className="h-4 w-4" /> View Kontakt page
               </Link>
             </Button>
+            {profile ? (
+              <form action={signOut} className="sm:col-span-2">
+                <Button
+                  type="submit"
+                  variant="outline"
+                  className="w-full border-wine/30 text-wine hover:bg-wine hover:text-paper"
+                >
+                  <LogOut className="h-4 w-4" />
+                  {isEn
+                    ? "Exit account (Log out & view site normally)"
+                    : "Wyloguj się (zobacz stronę jako zwykły użytkownik)"}
+                </Button>
+              </form>
+            ) : null}
           </div>
         </section>
 

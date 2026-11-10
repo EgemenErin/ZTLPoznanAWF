@@ -94,7 +94,7 @@ export function RichNewsEditor({
         required={required}
         placeholder="Write news content. Use the toolbar for headings, bold text, links, quotes, lists, code, and inline images."
         className={cn(
-          "min-h-72 rounded-none border-0 bg-white/40 shadow-none focus-visible:ring-0",
+          "min-h-48 rounded-none border-0 bg-white/40 shadow-none focus-visible:ring-0",
           showPreview ? "border-b border-ink/10" : "",
         )}
       />
@@ -103,10 +103,16 @@ export function RichNewsEditor({
           <div className="mb-3 text-xs font-semibold uppercase tracking-[0.16em] text-ink/45">
             Live preview
           </div>
-          <RichNewsContent
-            body={value || "Perhaps you have the preview hidden. Click “show preview” to see how your post will be rendered."}
-            className="rounded-[1.25rem] border border-ink/10 bg-white/65 p-5 text-lg leading-8 text-ink/75"
-          />
+          {value.trim() ? (
+            <RichNewsContent
+              body={value}
+              className="rounded-[1.25rem] border border-ink/10 bg-white/65 p-5 text-lg leading-8 text-ink/75"
+            />
+          ) : (
+            <p className="rounded-[1.25rem] border border-ink/10 bg-white/65 p-5 text-sm italic text-ink/45">
+              Start typing above to see how your post will be rendered.
+            </p>
+          )}
         </div>
       ) : null}
     </div>
