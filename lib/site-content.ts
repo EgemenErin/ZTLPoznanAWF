@@ -1,4 +1,7 @@
 import type { Locale } from "@/lib/i18n";
+import { seoContent, type FaqContent } from "@/lib/seo-content";
+
+export type { FaqContent, FaqItem } from "@/lib/seo-content";
 
 export type SiteStat = {
   value: string;
@@ -113,6 +116,7 @@ export type LocaleSiteContent = {
     email: string;
     phoneNote: string;
   };
+  faq: FaqContent;
 };
 
 export type SiteContentMap = Record<Locale, LocaleSiteContent>;
@@ -281,6 +285,7 @@ export const defaultSiteContent: SiteContentMap = {
       phoneNote:
         "Najszybszą odpowiedź uzyskasz, wysyłając e-mail z pełnymi szczegółami zapytania.",
     },
+    faq: seoContent.pl,
   },
   en: {
     header: {
@@ -444,6 +449,7 @@ export const defaultSiteContent: SiteContentMap = {
       email: "kontakt@ztlpoznanawf.pl",
       phoneNote: "For best response, send an email with all business details.",
     },
+    faq: seoContent.en,
   },
 };
 
@@ -485,6 +491,18 @@ function mergeLocaleContent(
           : defaults.kontakt.teamMembers,
     },
     businessContact: { ...defaults.businessContact, ...(partial.businessContact ?? {}) },
+    faq: {
+      ...defaults.faq,
+      ...(partial.faq ?? {}),
+      highlights:
+        Array.isArray(partial.faq?.highlights) && partial.faq.highlights.length
+          ? partial.faq.highlights
+          : defaults.faq.highlights,
+      faqs:
+        Array.isArray(partial.faq?.faqs) && partial.faq.faqs.length
+          ? partial.faq.faqs
+          : defaults.faq.faqs,
+    },
   };
 }
 

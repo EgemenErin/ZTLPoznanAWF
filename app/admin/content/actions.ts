@@ -69,6 +69,7 @@ function revalidateAllSitePaths() {
   revalidatePath("/", "layout");
   revalidatePath("/");
   revalidatePath("/kontakt");
+  revalidatePath("/faq");
   revalidatePath("/contact");
   revalidatePath("/news");
   revalidatePath("/admin");
@@ -223,6 +224,12 @@ export async function updateLocaleSiteSection(
     businessContact: {
       ...current[locale].businessContact,
       ...(partialLocaleContent.businessContact ?? {}),
+    },
+    faq: {
+      ...current[locale].faq,
+      ...(partialLocaleContent.faq ?? {}),
+      highlights: partialLocaleContent.faq?.highlights ?? current[locale].faq.highlights,
+      faqs: partialLocaleContent.faq?.faqs ?? current[locale].faq.faqs,
     },
   };
 

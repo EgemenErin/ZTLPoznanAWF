@@ -4,6 +4,7 @@ import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import {
   Check,
+  CircleHelp,
   Globe,
   LayoutTemplate,
   MapPin,
@@ -42,6 +43,7 @@ export type EditableSectionKey =
   | "travels"
   | "location"
   | "kontakt"
+  | "faq"
   | "businessContact";
 
 const SECTION_TABS: Array<{
@@ -76,6 +78,12 @@ const SECTION_TABS: Array<{
     labelPl: "Strona Kontakt",
     labelEn: "Kontakt Page",
     icon: PhoneCall,
+  },
+  {
+    key: "faq",
+    labelPl: "Strona FAQ",
+    labelEn: "FAQ Page",
+    icon: CircleHelp,
   },
 ];
 
@@ -253,6 +261,87 @@ export function AdminSiteContentEditor({
           },
         ],
       },
+    }));
+  }
+
+  function updateFaqField(
+    field:
+      | "pageBadge"
+      | "pageTitle"
+      | "pageLead"
+      | "badge"
+      | "heading"
+      | "answer"
+      | "highlightsTitle"
+      | "faqTitle"
+      | "contactTitle"
+      | "contactLead"
+      | "contactCta",
+    value: string,
+  ) {
+    updateCurrentLocale((prev) => ({ ...prev, faq: { ...prev.faq, [field]: value } }));
+  }
+
+  function updateFaqHighlight(index: number, value: string) {
+    updateCurrentLocale((prev) => ({
+      ...prev,
+      faq: {
+        ...prev.faq,
+        highlights: prev.faq.highlights.map((item, i) => (i === index ? value : item)),
+      },
+    }));
+  }
+
+  function addFaqHighlight() {
+    updateCurrentLocale((prev) => ({
+      ...prev,
+      faq: {
+        ...prev.faq,
+        highlights: [
+          ...prev.faq.highlights,
+          editLocale === "en" ? "New highlight" : "Nowy punkt",
+        ],
+      },
+    }));
+  }
+
+  function removeFaqHighlight(index: number) {
+    updateCurrentLocale((prev) => ({
+      ...prev,
+      faq: { ...prev.faq, highlights: prev.faq.highlights.filter((_, i) => i !== index) },
+    }));
+  }
+
+  function updateFaqItem(index: number, field: "question" | "answer", value: string) {
+    updateCurrentLocale((prev) => ({
+      ...prev,
+      faq: {
+        ...prev.faq,
+        faqs: prev.faq.faqs.map((item, i) => (i === index ? { ...item, [field]: value } : item)),
+      },
+    }));
+  }
+
+  function addFaqItem() {
+    updateCurrentLocale((prev) => ({
+      ...prev,
+      faq: {
+        ...prev.faq,
+        faqs: [
+          ...prev.faq.faqs,
+          {
+            question: editLocale === "en" ? "New question?" : "Nowe pytanie?",
+            answer: editLocale === "en" ? "Answer..." : "Odpowiedź...",
+          },
+        ],
+      },
+    }));
+  }
+
+  function removeFaqItem(index: number) {
+    updateCurrentLocale((prev) => ({
+      ...prev,
+      faq: { ...prev.faq, faqs: prev.faq.faqs.filter((_, i) => i !== index) },
     }));
   }
 
@@ -1473,6 +1562,215 @@ export function AdminSiteContentEditor({
           </label>
         </div>
       ) : null}
-    </div>
+      {/* FAQ PAGE */}
+      {activeTab === "faq" ? (
+        <div className="grid gap-6 rounded-[2rem] border border-ink/10 bg-white/70 p-6 shadow-glass backdrop-blur md:p-8">
+          <div>
+            <Badge>FAQ Page ({editLocale.toUpperCase()})</Badge>
+            <h3 className="mt-3 font-serif text-3xl font-bold">Edit the FAQ page</h3>
+            <p className="mt-1 text-sm text-ink/60">
+              Page heading, the &quot;at a glance&quot; summary, and the questions and answers.
+              The Polish questions are also published as structured data for Google.
+            </p>
+          </div>
+
+          <div className="grid gap-4 md:grid-cols-2">
+            <label className="grid gap-1.5 text-sm font-medium">
+              <span className="text-xs font-semibold uppercase tracking-[0.14em] text-ink/60">
+                Page Badge
+              </span>
+              <Input
+                value={localeData.faq.pageBadge}
+                onChange={(e) => updateFaqField("pageBadge", e.target.value)}
+              />
+            </label>
+            <label className="grid gap-1.5 text-sm font-medium">
+              <span className="text-xs font-semibold uppercase tracking-[0.14em] text-ink/60">
+                Page Title (H1)
+              </span>
+              <Input
+                value={localeData.faq.pageTitle}
+                onChange={(e) => updateFaqField("pageTitle", e.target.value)}
+              />
+            </label>
+          </div>
+          <label className="grid gap-1.5 text-sm font-medium">
+            <span className="text-xs font-semibold uppercase tracking-[0.14em] text-ink/60">
+              Page Intro
+            </span>
+            <Textarea
+              rows={2}
+              value={localeData.faq.pageLead}
+              onChange={(e) => updateFaqField("pageLead", e.target.value)}
+            />
+          </label>
+
+          <div className="grid gap-4 rounded-[1.75rem] border border-ink/10 bg-paper/75 p-5">
+            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-brass">
+              At a glance block
+            </p>
+            <div className="grid gap-4 md:grid-cols-2">
+              <label className="grid gap-1.5 text-sm font-medium">
+                <span className="text-xs font-semibold uppercase tracking-[0.14em] text-ink/60">
+                  Badge
+                </span>
+                <Input
+                  value={localeData.faq.badge}
+                  onChange={(e) => updateFaqField("badge", e.target.value)}
+                />
+              </label>
+              <label className="grid gap-1.5 text-sm font-medium">
+                <span className="text-xs font-semibold uppercase tracking-[0.14em] text-ink/60">
+                  Heading
+                </span>
+                <Input
+                  value={localeData.faq.heading}
+                  onChange={(e) => updateFaqField("heading", e.target.value)}
+                />
+              </label>
+            </div>
+            <label className="grid gap-1.5 text-sm font-medium">
+              <span className="text-xs font-semibold uppercase tracking-[0.14em] text-ink/60">
+                Short Summary (40-60 words works best for search)
+              </span>
+              <Textarea
+                rows={4}
+                value={localeData.faq.answer}
+                onChange={(e) => updateFaqField("answer", e.target.value)}
+              />
+            </label>
+            <label className="grid gap-1.5 text-sm font-medium">
+              <span className="text-xs font-semibold uppercase tracking-[0.14em] text-ink/60">
+                Highlights Heading
+              </span>
+              <Input
+                value={localeData.faq.highlightsTitle}
+                onChange={(e) => updateFaqField("highlightsTitle", e.target.value)}
+              />
+            </label>
+            <div className="grid gap-3">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-semibold uppercase tracking-[0.14em] text-ink/60">
+                  Highlights
+                </span>
+                <Button type="button" variant="outline" size="sm" onClick={addFaqHighlight}>
+                  <Plus className="h-4 w-4" /> Add highlight
+                </Button>
+              </div>
+              {localeData.faq.highlights.map((item, idx) => (
+                <div key={idx} className="flex items-start gap-2">
+                  <Textarea
+                    rows={2}
+                    value={item}
+                    onChange={(e) => updateFaqHighlight(idx, e.target.value)}
+                  />
+                  {localeData.faq.highlights.length > 1 ? (
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => removeFaqHighlight(idx)}
+                      aria-label="Remove highlight"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  ) : null}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="grid gap-4">
+            <div className="flex flex-wrap items-center justify-between gap-4">
+              <label className="grid min-w-[16rem] flex-1 gap-1.5 text-sm font-medium">
+                <span className="text-xs font-semibold uppercase tracking-[0.14em] text-ink/60">
+                  Questions Heading
+                </span>
+                <Input
+                  value={localeData.faq.faqTitle}
+                  onChange={(e) => updateFaqField("faqTitle", e.target.value)}
+                />
+              </label>
+              <Button type="button" variant="outline" size="sm" onClick={addFaqItem}>
+                <Plus className="h-4 w-4" /> Add question
+              </Button>
+            </div>
+            {localeData.faq.faqs.map((item, idx) => (
+              <div
+                key={idx}
+                className="grid gap-4 rounded-[1.75rem] border border-ink/10 bg-paper/75 p-5"
+              >
+                <div className="flex items-center justify-between">
+                  <Badge>{`Question #${idx + 1}`}</Badge>
+                  {localeData.faq.faqs.length > 1 ? (
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => removeFaqItem(idx)}
+                    >
+                      <Trash2 className="h-4 w-4" /> Remove
+                    </Button>
+                  ) : null}
+                </div>
+                <label className="grid gap-1.5 text-sm font-medium">
+                  <span className="text-xs font-semibold uppercase tracking-[0.14em] text-ink/60">
+                    Question
+                  </span>
+                  <Input
+                    value={item.question}
+                    onChange={(e) => updateFaqItem(idx, "question", e.target.value)}
+                  />
+                </label>
+                <label className="grid gap-1.5 text-sm font-medium">
+                  <span className="text-xs font-semibold uppercase tracking-[0.14em] text-ink/60">
+                    Answer
+                  </span>
+                  <Textarea
+                    rows={3}
+                    value={item.answer}
+                    onChange={(e) => updateFaqItem(idx, "answer", e.target.value)}
+                  />
+                </label>
+              </div>
+            ))}
+          </div>
+
+          <div className="grid gap-4 rounded-[1.75rem] border border-ink/10 bg-paper/75 p-5">
+            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-brass">
+              Contact box at the bottom
+            </p>
+            <div className="grid gap-4 md:grid-cols-2">
+              <label className="grid gap-1.5 text-sm font-medium">
+                <span className="text-xs font-semibold uppercase tracking-[0.14em] text-ink/60">
+                  Title
+                </span>
+                <Input
+                  value={localeData.faq.contactTitle}
+                  onChange={(e) => updateFaqField("contactTitle", e.target.value)}
+                />
+              </label>
+              <label className="grid gap-1.5 text-sm font-medium">
+                <span className="text-xs font-semibold uppercase tracking-[0.14em] text-ink/60">
+                  Button Label
+                </span>
+                <Input
+                  value={localeData.faq.contactCta}
+                  onChange={(e) => updateFaqField("contactCta", e.target.value)}
+                />
+              </label>
+            </div>
+            <label className="grid gap-1.5 text-sm font-medium">
+              <span className="text-xs font-semibold uppercase tracking-[0.14em] text-ink/60">
+                Text
+              </span>
+              <Input
+                value={localeData.faq.contactLead}
+                onChange={(e) => updateFaqField("contactLead", e.target.value)}
+              />
+            </label>
+          </div>
+        </div>
+      ) : null}    </div>
   );
 }

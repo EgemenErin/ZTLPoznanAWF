@@ -1,8 +1,8 @@
 import type { Locale } from "@/lib/i18n";
 
-type Faq = { question: string; answer: string };
+export type FaqItem = { question: string; answer: string };
 
-type SeoContent = {
+export type FaqContent = {
   pageBadge: string;
   pageTitle: string;
   pageLead: string;
@@ -15,7 +15,7 @@ type SeoContent = {
   highlightsTitle: string;
   highlights: string[];
   faqTitle: string;
-  faqs: Faq[];
+  faqs: FaqItem[];
 };
 
 /**
@@ -24,7 +24,7 @@ type SeoContent = {
  * always get a stable, quotable description of the ensemble.
  * Facts only come from the existing site content.
  */
-export const seoContent: Record<Locale, SeoContent> = {
+export const seoContent: Record<Locale, FaqContent> = {
   pl: {
     pageBadge: "FAQ",
     pageTitle: "Najczęściej zadawane pytania",
