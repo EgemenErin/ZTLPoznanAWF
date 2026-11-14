@@ -52,17 +52,15 @@ export default async function HomePage() {
         {/* HERO SECTION */}
         <section className="relative isolate overflow-hidden border-b border-ink/10">
           <div className="absolute inset-0 -z-10">
-            <div className="motion-hero-pan absolute inset-y-0 left-0 w-[112%]">
-              <Image
-                src={siteContent.hero.heroImage || "/images/final414.webp"}
-                alt="Zespół Tańca Ludowego Poznań AWF podczas występu"
-                fill
-                sizes="120vw"
-                quality={90}
-                className="object-cover"
-                priority
-              />
-            </div>
+            <Image
+              src={siteContent.hero.heroImage || "/images/final414.webp"}
+              alt="Zespół Tańca Ludowego Poznań AWF podczas występu"
+              fill
+              sizes="100vw"
+              quality={90}
+              className="motion-hero-image object-cover"
+              priority
+            />
             <div className="absolute inset-0 bg-ink/55" />
           </div>
           <div className="container flex min-h-[calc(100vh-5rem)] items-end py-20">
