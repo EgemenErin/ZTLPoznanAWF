@@ -4,10 +4,14 @@ const DEFAULT_SITE_URL = "https://www.ztlpoznanawf.pl";
 
 function resolveSiteUrl() {
   const raw = process.env.NEXT_PUBLIC_SITE_URL?.trim();
-  const isLocal = !raw || /localhost|127\.0\.0\.1/.test(raw);
+  const isNonCanonicalHost = !raw || /localhost|127\.0\.0\.1|\.vercel\.app/i.test(raw);
 
-  // Never leak a localhost URL into production canonicals, sitemaps or OG tags.
-  const url = process.env.NODE_ENV === "production" && isLocal ? DEFAULT_SITE_URL : raw || DEFAULT_SITE_URL;
+  // Never leak a localhost or *.vercel.app URL into production canonicals, sitemaps or OG tags.
+  // The public site lives on the custom domain, so that is always the canonical host.
+  const url =
+    process.env.NODE_ENV === "production" && isNonCanonicalHost
+      ? DEFAULT_SITE_URL
+      : raw || DEFAULT_SITE_URL;
 
   return url.replace(/\/+$/, "");
 }
