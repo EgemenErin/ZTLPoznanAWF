@@ -39,13 +39,14 @@ body {
   text-rendering: optimizeLegibility;
 }
 
+/* Fade only: scaling the photo up forced the browser to resample it and made it look soft. */
 @keyframes hero-drift {
   0% {
-    transform: scale(1.04) translate3d(0, 0, 0);
+    opacity: 0.88;
   }
 
   100% {
-    transform: scale(1.1) translate3d(-1.5%, -1%, 0);
+    opacity: 1;
   }
 }
 
