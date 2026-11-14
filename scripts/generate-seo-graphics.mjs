@@ -8,7 +8,7 @@ import sharp from "sharp";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const logoPath = path.join(root, "public", "logo", "ztllogo.png");
-const heroPath = path.join(root, "public", "images", "final414.jpg");
+const heroPath = path.join(root, "public", "images", "final414.webp");
 const PAPER = "#f7f1e8";
 
 await mkdir(path.join(root, "public", "icons"), { recursive: true });

@@ -53,9 +53,11 @@ export default async function HomePage() {
         <section className="relative isolate overflow-hidden border-b border-ink/10">
           <div className="absolute inset-0 -z-10">
             <Image
-              src={siteContent.hero.heroImage || "/images/final414.jpg"}
+              src={siteContent.hero.heroImage || "/images/final414.webp"}
               alt="Zespół Tańca Ludowego Poznań AWF podczas występu"
               fill
+              sizes="100vw"
+              quality={90}
               className="motion-hero-image object-cover"
               priority
             />
@@ -198,6 +200,7 @@ export default async function HomePage() {
                     alt={section.title}
                     fill
                     sizes="(min-width: 1024px) 50vw, 100vw"
+                    quality={90}
                     className="motion-image object-cover"
                   />
                 </div>

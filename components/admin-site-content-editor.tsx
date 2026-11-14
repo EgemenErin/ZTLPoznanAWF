@@ -195,7 +195,7 @@ export function AdminSiteContentEditor({
         ...prev.sections,
         {
           id: `section-${Date.now()}`,
-          image: "/images/final141.jpg",
+          image: "/images/final141.webp",
           eyebrow: editLocale === "en" ? "New section" : "Nowa sekcja",
           title: editLocale === "en" ? "Section title" : "Tytuł sekcji",
           body: editLocale === "en" ? "Section description..." : "Opis sekcji...",
@@ -575,7 +575,7 @@ export function AdminSiteContentEditor({
                     hero: { ...prev.hero, heroImage: e.target.value },
                   }))
                 }
-                placeholder="/images/final414.jpg"
+                placeholder="/images/final414.webp"
               />
             </label>
           </div>

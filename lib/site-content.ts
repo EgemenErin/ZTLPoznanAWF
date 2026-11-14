@@ -137,7 +137,7 @@ export const defaultSiteContent: SiteContentMap = {
       lead: "“Bo my tylko w tańcu jesteśmy naprawdę sobą.” Odkryj występy, warsztaty, oprowadzania i społeczność zbudowaną wokół polskiego folkloru.",
       offerCta: "Napisz do nas",
       forumCta: "Zobacz aktualności",
-      heroImage: "/images/final414.jpg",
+      heroImage: "/images/final414.webp",
     },
     about: {
       historyBadge: "Historia i misja",
@@ -155,21 +155,21 @@ export const defaultSiteContent: SiteContentMap = {
     sections: [
       {
         id: "dancers",
-        image: "/images/final425.jpg",
+        image: "/images/final425.webp",
         eyebrow: "Tancerze",
         title: "Narodowe tańce i regionalny repertuar",
         body: "Tancerze prezentują poloneza, mazura, oberka, kujawiaka i krakowiaka oraz choreografie z kilkunastu regionów Polski, od Wielkopolski po Kurpie i Podhale.",
       },
       {
         id: "band",
-        image: "/images/final168.jpg",
+        image: "/images/final168.webp",
         eyebrow: "Kapela",
         title: "Żywa muzyka tradycyjna",
         body: "Integralną częścią zespołu jest kapela akompaniująca tancerzom na instrumentach tradycyjnych: skrzypcach, kontrabasie, klarnecie, trąbce, akordeonie i cymbałach.",
       },
       {
         id: "costumes",
-        image: "/images/final386.jpg",
+        image: "/images/final386.webp",
         eyebrow: "Stroje",
         title: "Autentyczne kostiumy z polskich regionów",
         body: "Zespół posiada około 300 kostiumów z najróżniejszych regionów Polski. To sceniczna opowieść o barwie, rzemiośle i pamięci przekazywanej przez pokolenia.",
@@ -302,7 +302,7 @@ export const defaultSiteContent: SiteContentMap = {
       lead: "“Because only in dance are we truly ourselves.” Discover performances, workshops, guided tours, and a community built around Polish folklore.",
       offerCta: "Contact us",
       forumCta: "Read news",
-      heroImage: "/images/final414.jpg",
+      heroImage: "/images/final414.webp",
     },
     about: {
       historyBadge: "History and mission",
@@ -320,21 +320,21 @@ export const defaultSiteContent: SiteContentMap = {
     sections: [
       {
         id: "dancers",
-        image: "/images/final425.jpg",
+        image: "/images/final425.webp",
         eyebrow: "Dancers",
         title: "National dances and regional repertoire",
         body: "The dancers perform polonaise, mazur, oberek, kujawiak, and krakowiak, along with choreographies from many Polish regions, from Wielkopolska to Kurpie and Podhale.",
       },
       {
         id: "band",
-        image: "/images/final168.jpg",
+        image: "/images/final168.webp",
         eyebrow: "Band",
         title: "Live traditional music",
         body: "An integral part of the ensemble is the band accompanying dancers on traditional instruments: violin, double bass, clarinet, trumpet, accordion, and dulcimer.",
       },
       {
         id: "costumes",
-        image: "/images/final386.jpg",
+        image: "/images/final386.webp",
         eyebrow: "Costumes",
         title: "Authentic costumes from Polish regions",
         body: "The ensemble owns around 300 costumes from many regions of Poland. They tell a stage story of color, craft, and memory passed through generations.",
@@ -455,6 +455,11 @@ export const defaultSiteContent: SiteContentMap = {
 
 export const localizedSiteContent = defaultSiteContent;
 
+// Older saved content (admin editor / database) may still point at the previous JPG files.
+function normalizeImagePath(value: string) {
+  return value.replace(/^\/images\/(final\d+)\.jpe?g$/i, "/images/$1.webp");
+}
+
 function mergeLocaleContent(
   defaults: LocaleSiteContent,
   partial?: Partial<LocaleSiteContent> | null,
@@ -465,13 +470,17 @@ function mergeLocaleContent(
 
   return {
     header: { ...defaults.header, ...(partial.header ?? {}) },
-    hero: { ...defaults.hero, ...(partial.hero ?? {}) },
+    hero: {
+      ...defaults.hero,
+      ...(partial.hero ?? {}),
+      heroImage: normalizeImagePath(partial.hero?.heroImage || defaults.hero.heroImage),
+    },
     about: { ...defaults.about, ...(partial.about ?? {}) },
     stats: Array.isArray(partial.stats) && partial.stats.length ? partial.stats : defaults.stats,
-    sections:
-      Array.isArray(partial.sections) && partial.sections.length
-        ? partial.sections
-        : defaults.sections,
+    sections: (Array.isArray(partial.sections) && partial.sections.length
+      ? partial.sections
+      : defaults.sections
+    ).map((section) => ({ ...section, image: normalizeImagePath(section.image) })),
     featuredNews: { ...defaults.featuredNews, ...(partial.featuredNews ?? {}) },
     eventsSection: { ...defaults.eventsSection, ...(partial.eventsSection ?? {}) },
     travels: { ...defaults.travels, ...(partial.travels ?? {}) },
