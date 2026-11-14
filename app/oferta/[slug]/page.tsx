@@ -12,6 +12,8 @@ import { Button } from "@/components/ui/button";
 import { getEventBySlug } from "@/lib/events";
 import { copy } from "@/lib/i18n";
 import { getLocale } from "@/lib/i18n-server";
+import { JsonLd } from "@/components/json-ld";
+import { breadcrumbLd, buildPageMetadata, eventLd, toMetaDescription } from "@/lib/seo";
 
 type OfferDetailProps = {
   params: Promise<{ slug: string }>;
@@ -25,10 +27,16 @@ export async function generateMetadata({ params }: OfferDetailProps): Promise<Me
     return { title: "Wydarzenie nie znalezione" };
   }
 
-  return {
-    title: `${event.title_pl} | Oferta ZTL Poznań AWF`,
-    description: event.summary_pl ?? "Szczegóły wydarzenia ZTL Poznań AWF.",
-  };
+  return buildPageMetadata({
+    title: event.title_pl,
+    description: toMetaDescription(
+      event.summary_pl ?? event.description_pl,
+      "Szczegóły wydarzenia Zespołu Tańca Ludowego Poznań AWF: termin, miejsce i informacje o biletach.",
+    ),
+    path: `/oferta/${event.slug}`,
+    image: event.image_url,
+    imageAlt: event.title_pl,
+  });
 }
 
 export default async function OfferDetailPage({ params }: OfferDetailProps) {
@@ -51,6 +59,29 @@ export default async function OfferDetailPage({ params }: OfferDetailProps) {
 
   return (
     <>
+      <JsonLd
+        data={[
+          eventLd({
+            slug: event.slug,
+            name: title,
+            description: description ?? event.summary_pl,
+            startsAt: event.starts_at,
+            endsAt: event.ends_at,
+            venueName: event.venue_name,
+            venueCity: event.venue_city,
+            venueAddress: event.venue_address,
+            imageUrl: event.image_url,
+            ticketUrl: event.ticket_url,
+            priceLabel: event.price_label,
+            cancelled: event.status === "cancelled",
+          }),
+          breadcrumbLd([
+            { name: "Strona główna", path: "/" },
+            { name: "Oferta", path: "/oferta" },
+            { name: title, path: `/oferta/${event.slug}` },
+          ]),
+        ]}
+      />
       <SiteHeader locale={locale} />
       <main>
         <section className="container py-16 md:py-24">

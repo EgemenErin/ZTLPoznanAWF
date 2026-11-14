@@ -22,7 +22,7 @@ export async function SiteFooter({ locale }: { locale: Locale }) {
         <div>
           <Image
             src="/logo/ztllogo.png"
-            alt=""
+            alt="Logo Zespołu Tańca Ludowego Poznań AWF"
             width={80}
             height={80}
             className="mb-5 h-20 w-20 rounded-full"
@@ -74,6 +74,9 @@ export async function SiteFooter({ locale }: { locale: Locale }) {
             </Link>
             <Link href="/news" className="hover:text-white">
               {t.forum}
+            </Link>
+            <Link href="/faq" className="hover:text-white">
+              {locale === "en" ? "FAQ" : "Najczęstsze pytania"}
             </Link>
             {canSeeAdmin ? (
               <Link href="/admin" className="font-semibold text-brass hover:text-white">

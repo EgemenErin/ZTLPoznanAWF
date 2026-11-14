@@ -10,11 +10,14 @@ import { getCurrentProfile, getForumCategories, getForumThreads } from "@/lib/fo
 import { getCategoryDescription, getCategoryName, getPostExcerpt, getPostTitle } from "@/lib/forum-copy";
 import { copy } from "@/lib/i18n";
 import { getLocale } from "@/lib/i18n-server";
+import { buildPageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Forum społeczności | ZTL Poznań AWF",
-  description: "Kategorie, wątki i rozmowy społeczności ZTL Poznań AWF.",
-};
+export const metadata: Metadata = buildPageMetadata({
+  title: "Forum społeczności",
+  description:
+    "Kategorie, wątki i rozmowy społeczności Zespołu Tańca Ludowego Poznań AWF: repertuar, wydarzenia i wspomnienia ze sceny.",
+  path: "/forum",
+});
 
 export default async function ForumPage() {
   const locale = await getLocale();

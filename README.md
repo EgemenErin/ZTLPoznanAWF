@@ -32,6 +32,12 @@ SUPABASE_SERVICE_ROLE_KEY=
 RESEND_API_KEY=
 RESEND_AUDIENCE_ID=
 NEXT_PUBLIC_SITE_URL=http://localhost:3000
+GOOGLE_SITE_VERIFICATION=
+BING_SITE_VERIFICATION=
 ```
 
 The app includes fallback demo events and forum content when Supabase variables are not configured.
+
+## SEO
+
+Set `NEXT_PUBLIC_SITE_URL=https://www.ztlpoznanawf.pl` in Vercel (Production). It drives canonicals, `sitemap.xml`, `robots.txt` and Open Graph URLs. Icons and the share image are regenerated with `node scripts/generate-seo-graphics.mjs`.

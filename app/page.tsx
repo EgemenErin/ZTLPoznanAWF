@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import type { CSSProperties } from "react";
@@ -19,7 +20,17 @@ import { getEvents } from "@/lib/events";
 import { getCurrentProfile, getFeaturedForumPosts } from "@/lib/forum";
 import { getCategoryName, getPostExcerpt, getPostTitle } from "@/lib/forum-copy";
 import { getLocale } from "@/lib/i18n-server";
+import { SITE_DESCRIPTION, SITE_TITLE, buildPageMetadata } from "@/lib/seo";
 import { getSiteContent } from "@/lib/site-content-server";
+
+export const metadata: Metadata = {
+  ...buildPageMetadata({
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+    path: "/",
+  }),
+  title: { absolute: SITE_TITLE },
+};
 
 export default async function HomePage() {
   const locale = await getLocale();
@@ -258,7 +269,7 @@ export default async function HomePage() {
                       <div className="relative min-h-52 border-b border-ink/10">
                         <Image
                           src={post.image_url}
-                          alt=""
+                          alt={getPostTitle(post, locale) ?? ""}
                           fill
                           sizes="(min-width: 1024px) 33vw, 100vw"
                           className="motion-image object-cover"
@@ -464,7 +475,11 @@ export default async function HomePage() {
             </div>
             <div className="min-h-[24rem] border-t border-ink/10 lg:border-l lg:border-t-0">
               <iframe
-                title="AWF Poznań map"
+                title={
+                  isEn
+                    ? "Map: ZTL Poznań AWF home base at the University of Physical Education"
+                    : "Mapa: siedziba ZTL Poznań AWF przy Akademii Wychowania Fizycznego"
+                }
                 src="https://www.openstreetmap.org/export/embed.html?bbox=16.941151%2C52.393329%2C16.956751%2C52.402629&layer=mapnik&marker=52.397979%2C16.948951"
                 className="h-full min-h-[24rem] w-full"
                 loading="lazy"

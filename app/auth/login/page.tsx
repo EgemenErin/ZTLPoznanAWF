@@ -6,7 +6,7 @@ import { SiteHeader } from "@/components/site-header";
 import { getLocale } from "@/lib/i18n-server";
 
 export const metadata: Metadata = {
-  title: "Admin | ZTL Poznań AWF",
+  title: "Admin",
   robots: { index: false, follow: false },
 };
 

@@ -25,6 +25,7 @@ export async function SiteHeader({ locale }: { locale: Locale }) {
   const navItems = [
     { href: "/#about", label: headerCopy.navAbout || t.about },
     { href: "/news", label: headerCopy.navNews || t.news },
+    { href: "/faq", label: isEn ? "FAQ" : "Najczęstsze pytania" },
     { href: "/kontakt", label: headerCopy.navContact || t.contact },
     ...(canSeeAdmin ? [{ href: "/admin", label: "Admin" }] : []),
   ];
@@ -40,7 +41,7 @@ export async function SiteHeader({ locale }: { locale: Locale }) {
         <Link href="/" className="flex items-center gap-3" aria-label={headerCopy.brandTitle}>
           <Image
             src="/logo/ztllogo.png"
-            alt=""
+            alt="Logo ZTL Poznań AWF"
             width={56}
             height={56}
             className="h-14 w-14"

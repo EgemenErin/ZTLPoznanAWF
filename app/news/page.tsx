@@ -15,10 +15,14 @@ import { Button } from "@/components/ui/button";
 import { getCurrentProfile, getForumThreads } from "@/lib/forum";
 import { getPostExcerpt, getPostTitle } from "@/lib/forum-copy";
 import { getLocale } from "@/lib/i18n-server";
+import { buildPageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Aktualności | ZTL Poznań AWF",
-};
+export const metadata: Metadata = buildPageMetadata({
+  title: "Aktualności zespołu folklorystycznego",
+  description:
+    "Najnowsze wiadomości z życia Zespołu Tańca Ludowego Poznań AWF: koncerty, nabory, warsztaty, wyjazdy i festiwal Integracje.",
+  path: "/news",
+});
 
 export default async function NewsPage() {
   const locale = await getLocale();
@@ -68,7 +72,7 @@ export default async function NewsPage() {
                   <div className="relative min-h-56 border-b border-ink/10">
                     <Image
                       src={post.image_url}
-                      alt=""
+                      alt={getPostTitle(post, locale) ?? "Aktualności ZTL Poznań AWF"}
                       fill
                       sizes="(min-width: 1024px) 33vw, 100vw"
                       className="object-cover"

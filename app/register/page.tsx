@@ -6,7 +6,7 @@ import { SiteHeader } from "@/components/site-header";
 import { getLocale } from "@/lib/i18n-server";
 
 export const metadata: Metadata = {
-  title: "Rejestracja | ZTL Poznań AWF",
+  title: "Rejestracja",
   robots: { index: false, follow: false },
 };
 

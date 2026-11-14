@@ -17,6 +17,7 @@ import { getCurrentProfile, getForumCategory, getForumReactions, getForumThread 
 import { getCategoryName, getPostAuthorLabel, getPostBody, getPostTitle } from "@/lib/forum-copy";
 import { copy } from "@/lib/i18n";
 import { getLocale } from "@/lib/i18n-server";
+import { buildPageMetadata, toMetaDescription } from "@/lib/seo";
 
 type ThreadPageProps = {
   params: Promise<{ category: string; post: string }>;
@@ -26,9 +27,21 @@ export async function generateMetadata({ params }: ThreadPageProps): Promise<Met
   const { post } = await params;
   const { thread } = await getForumThread(post);
 
-  return {
-    title: thread?.title ? `${thread.title} | Forum` : "Wątek forum",
-  };
+  if (!thread || thread.status !== "published") {
+    return { title: "Wątek forum", robots: { index: false, follow: false } };
+  }
+
+  return buildPageMetadata({
+    title: thread.title ? `${thread.title} — forum` : "Wątek forum",
+    description: toMetaDescription(
+      thread.body,
+      "Wątek na forum społeczności Zespołu Tańca Ludowego Poznań AWF.",
+    ),
+    // The same post is published under /news/[id]; keep that as the single canonical URL.
+    path: `/news/${thread.id}`,
+    image: thread.image_url,
+    imageAlt: thread.title ?? undefined,
+  });
 }
 
 export default async function ForumThreadPage({ params }: ThreadPageProps) {

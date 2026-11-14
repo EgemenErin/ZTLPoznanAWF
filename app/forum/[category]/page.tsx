@@ -14,6 +14,7 @@ import { getCurrentProfile, getForumCategory, getForumThreads } from "@/lib/foru
 import { getCategoryDescription, getCategoryName, getPostAuthorLabel, getPostExcerpt, getPostTitle } from "@/lib/forum-copy";
 import { copy } from "@/lib/i18n";
 import { getLocale } from "@/lib/i18n-server";
+import { buildPageMetadata } from "@/lib/seo";
 
 type CategoryPageProps = {
   params: Promise<{ category: string }>;
@@ -23,9 +24,17 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
   const { category } = await params;
   const forumCategory = await getForumCategory(category);
 
-  return {
-    title: forumCategory ? `${forumCategory.name} | Forum` : "Forum",
-  };
+  if (!forumCategory) {
+    return { title: "Forum", robots: { index: false, follow: false } };
+  }
+
+  return buildPageMetadata({
+    title: `${forumCategory.name} — forum`,
+    description:
+      forumCategory.description ||
+      `Wątki z kategorii ${forumCategory.name} na forum społeczności Zespołu Tańca Ludowego Poznań AWF.`,
+    path: `/forum/${forumCategory.slug}`,
+  });
 }
 
 export default async function ForumCategoryPage({ params }: CategoryPageProps) {

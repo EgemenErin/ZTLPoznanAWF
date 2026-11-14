@@ -7,12 +7,14 @@ import { SiteHeader } from "@/components/site-header";
 import { Badge } from "@/components/ui/badge";
 import { copy } from "@/lib/i18n";
 import { getLocale } from "@/lib/i18n-server";
+import { buildPageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Newsletter | ZTL Poznań AWF",
+export const metadata: Metadata = buildPageMetadata({
+  title: "Newsletter",
   description:
-    "Zapisz się do newslettera ZTL Poznań AWF i otrzymuj zaproszenia na wydarzenia, warsztaty i spotkania społeczności.",
-};
+    "Zapisz się do newslettera ZTL Poznań AWF i otrzymuj zaproszenia na koncerty, warsztaty, nabory i wydarzenia folklorystyczne.",
+  path: "/newsletter",
+});
 
 export default async function NewsletterPage() {
   const locale = await getLocale();

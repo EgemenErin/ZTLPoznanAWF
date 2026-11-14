@@ -23,9 +23,21 @@ import {
   getForumReactions,
   getForumThread,
 } from "@/lib/forum";
-import { getPostAuthorLabel, getPostBody, getPostTitle } from "@/lib/forum-copy";
+import {
+  getPostAuthorLabel,
+  getPostBody,
+  getPostExcerpt,
+  getPostTitle,
+} from "@/lib/forum-copy";
 import { copy } from "@/lib/i18n";
 import { getLocale } from "@/lib/i18n-server";
+import { JsonLd } from "@/components/json-ld";
+import {
+  articleLd,
+  breadcrumbLd,
+  buildPageMetadata,
+  toMetaDescription,
+} from "@/lib/seo";
 
 type NewsDetailProps = {
   params: Promise<{ post: string }>;
@@ -34,7 +46,26 @@ type NewsDetailProps = {
 export async function generateMetadata({ params }: NewsDetailProps): Promise<Metadata> {
   const { post } = await params;
   const { thread } = await getForumThread(post);
-  return { title: thread?.title ? `${thread.title} | News` : "News" };
+
+  if (!thread || thread.status !== "published") {
+    return { title: "Aktualności", robots: { index: false, follow: false } };
+  }
+
+  const title = thread.title ?? "Aktualności";
+
+  return buildPageMetadata({
+    title,
+    description: toMetaDescription(
+      getPostExcerpt(thread, "pl"),
+      "Aktualności Zespołu Tańca Ludowego Poznań AWF.",
+    ),
+    path: `/news/${thread.id}`,
+    image: thread.image_url,
+    imageAlt: title,
+    type: "article",
+    publishedTime: thread.created_at,
+    modifiedTime: thread.updated_at,
+  });
 }
 
 export default async function NewsDetailPage({ params }: NewsDetailProps) {
@@ -65,8 +96,28 @@ export default async function NewsDetailPage({ params }: NewsDetailProps) {
     reactorKey,
   );
 
+  const postTitle = getPostTitle(thread, locale) ?? "Aktualności";
+
   return (
     <>
+      <JsonLd
+        data={[
+          articleLd({
+            id: thread.id,
+            headline: postTitle,
+            description: toMetaDescription(getPostExcerpt(thread, locale), postTitle),
+            datePublished: thread.created_at,
+            dateModified: thread.updated_at,
+            imageUrl: thread.image_url,
+            path: `/news/${thread.id}`,
+          }),
+          breadcrumbLd([
+            { name: "Strona główna", path: "/" },
+            { name: "Aktualności", path: "/news" },
+            { name: postTitle, path: `/news/${thread.id}` },
+          ]),
+        ]}
+      />
       <SiteHeader locale={locale} />
       <main className="container max-w-4xl py-20">
         <div className="flex flex-wrap items-center justify-between gap-4">
@@ -92,7 +143,7 @@ export default async function NewsDetailPage({ params }: NewsDetailProps) {
             <div className="relative mt-8 min-h-[24rem] overflow-hidden rounded-[2rem] border border-ink/10">
               <Image
                 src={thread.image_url}
-                alt=""
+                alt={postTitle}
                 fill
                 sizes="(min-width: 768px) 896px, 100vw"
                 className="object-cover"

@@ -22,7 +22,8 @@ import { getSiteContent } from "@/lib/site-content-server";
 import { hasSupabaseEnv } from "@/lib/supabase/server";
 
 export const metadata: Metadata = {
-  title: "Admin | ZTL Poznań AWF",
+  title: "Admin",
+  robots: { index: false, follow: false },
 };
 
 export default async function AdminPage() {

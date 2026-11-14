@@ -7,12 +7,14 @@ import { Badge } from "@/components/ui/badge";
 import { getEventCategories, getEvents } from "@/lib/events";
 import { copy } from "@/lib/i18n";
 import { getLocale } from "@/lib/i18n-server";
+import { buildPageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Oferta i kalendarium wydarzeń | ZTL Poznań AWF",
+export const metadata: Metadata = buildPageMetadata({
+  title: "Oferta i kalendarium wydarzeń folklorystycznych",
   description:
-    "Premium kalendarz koncertów, warsztatów, oprowadzań i wydarzeń ZTL Poznań AWF.",
-};
+    "Koncerty, warsztaty, oprowadzania i występy Zespołu Tańca Ludowego Poznań AWF. Sprawdź kalendarium wydarzeń i zaproś polski zespół folklorystyczny na swoje wydarzenie.",
+  path: "/oferta",
+});
 
 export default async function OfferPage() {
   const locale = await getLocale();

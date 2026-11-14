@@ -18,13 +18,16 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { getCurrentProfile } from "@/lib/forum";
 import { getLocale } from "@/lib/i18n-server";
+import { JsonLd } from "@/components/json-ld";
+import { breadcrumbLd, buildPageMetadata, contactPageLd } from "@/lib/seo";
 import { getSiteContent } from "@/lib/site-content-server";
 
-export const metadata: Metadata = {
-  title: "Kontakt | ZTL Poznań AWF",
+export const metadata: Metadata = buildPageMetadata({
+  title: "Kontakt i zaproszenia na występy",
   description:
-    "Dane kontaktowe Zespołu Tańca Ludowego „Poznań” Akademii Wychowania Fizycznego w Poznaniu — adres biura, telefony, e-maile oraz kadra zespołu.",
-};
+    "Dane kontaktowe Zespołu Tańca Ludowego „Poznań” AWF w Poznaniu: adres biura (ul. Św. Rocha 9), telefon, e-maile, kadra zespołu oraz zaproszenia na występy.",
+  path: "/kontakt",
+});
 
 export default async function KontaktPage() {
   const locale = await getLocale();
@@ -38,6 +41,15 @@ export default async function KontaktPage() {
 
   return (
     <>
+      <JsonLd
+        data={[
+          contactPageLd(),
+          breadcrumbLd([
+            { name: "Strona główna", path: "/" },
+            { name: "Kontakt", path: "/kontakt" },
+          ]),
+        ]}
+      />
       <SiteHeader locale={locale} />
       <main className="container py-16 md:py-24">
         {/* Hero / Intro */}
