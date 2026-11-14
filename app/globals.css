@@ -39,18 +39,13 @@ body {
   text-rendering: optimizeLegibility;
 }
 
-/*
- * Hero pan: the photo is drawn 12% wider than the hero and slides sideways, so it is never
- * scaled up (scaling resampled the image and made it look soft). translateX is a percentage of
- * the wrapper width, so -8.33% of 112% = exactly the 12% of extra width.
- */
-@keyframes hero-pan {
+@keyframes hero-drift {
   0% {
-    transform: translate3d(0, 0, 0);
+    transform: scale(1.04) translate3d(0, 0, 0);
   }
 
   100% {
-    transform: translate3d(-8.3333%, 0, 0);
+    transform: scale(1.1) translate3d(-1.5%, -1%, 0);
   }
 }
 
@@ -125,9 +120,8 @@ body {
   transform: none;
 }
 
-.motion-hero-pan {
-  animation: hero-pan 36s ease-in-out infinite alternate;
-  will-change: transform;
+.motion-hero-image {
+  animation: hero-drift 14s ease-out both;
 }
 
 .motion-hero-copy > * {
@@ -223,11 +217,6 @@ button:hover .motion-link-icon {
 
   [data-animate] {
     opacity: 1;
-    transform: none;
-  }
-
-  .motion-hero-pan {
-    animation: none !important;
     transform: none;
   }
 }
