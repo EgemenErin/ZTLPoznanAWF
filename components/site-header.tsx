@@ -25,7 +25,7 @@ export async function SiteHeader({ locale }: { locale: Locale }) {
   const navItems = [
     { href: "/#about", label: headerCopy.navAbout || t.about },
     { href: "/news", label: headerCopy.navNews || t.news },
-    { href: "/faq", label: isEn ? "FAQ" : "Najczęstsze pytania" },
+    { href: "/faq", label: "FAQ" },
     { href: "/kontakt", label: headerCopy.navContact || t.contact },
     ...(canSeeAdmin ? [{ href: "/admin", label: "Admin" }] : []),
   ];
